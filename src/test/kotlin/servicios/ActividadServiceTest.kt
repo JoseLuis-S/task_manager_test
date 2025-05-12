@@ -60,4 +60,25 @@ class ActividadServiceTest : DescribeSpec({
             }
         }
     }
+
+    describe("asociarSubtarea") {
+
+        it("Deberia asociar una subtarea a una tarea principal") {
+            val tareaPrincipal = mockk<Tarea>(relaxed = true)
+            val subtarea = mockk<Tarea>()
+
+            actividadService.asociarSubtarea(tareaPrincipal, subtarea)
+
+            verify { tareaPrincipal.agregarSubtarea(subtarea) }
+        }
+
+        it("Deberia lanzar una excepcion si la subtarea es nula") {
+            val tareaPrincipal = mockk<Tarea>(relaxed = true)
+            val subtarea: Tarea? = null
+
+            shouldThrow<java.lang.NullPointerException> {
+                actividadService.asociarSubtarea(tareaPrincipal, subtarea!!)
+            }
+        }
+    }
 })
