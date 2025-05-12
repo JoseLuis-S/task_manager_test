@@ -1,6 +1,7 @@
 package servicios
 
 import es.prog2425.taskmanager.datos.ActividadRepository
+import es.prog2425.taskmanager.modelo.Estado
 import es.prog2425.taskmanager.modelo.Tarea
 import es.prog2425.taskmanager.servicios.ActividadService
 import io.kotest.assertions.throwables.shouldThrow
@@ -78,6 +79,27 @@ class ActividadServiceTest : DescribeSpec({
 
             shouldThrow<java.lang.NullPointerException> {
                 actividadService.asociarSubtarea(tareaPrincipal, subtarea!!)
+            }
+        }
+    }
+
+    describe("cambiarEstadoTarea") {
+
+        it("Deberia cambiar el estado de una tarea correctamente") {
+            val tarea = mockk<Tarea>(relaxed = true)
+            val nuevoEstado = mockk<Estado>()
+
+            actividadService.cambiarEstadoTarea(tarea, nuevoEstado)
+
+            verify { tarea.cambiarEstadoConHistorial(nuevoEstado) }
+        }
+
+        it("Deberia lanzar una excepcion si la tarea es nula") {
+            val tarea: Tarea? = null
+            val nuevoEstado = mockk<Estado>()
+
+            shouldThrow<java.lang.NullPointerException> {
+                actividadService.cambiarEstadoTarea(tarea!!, nuevoEstado)
             }
         }
     }
