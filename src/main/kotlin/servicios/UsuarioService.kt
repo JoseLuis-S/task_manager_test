@@ -5,8 +5,9 @@ import es.prog2425.taskmanager.datos.UsuarioRepository
 import es.prog2425.taskmanager.modelo.Tarea
 import es.prog2425.taskmanager.modelo.Usuario
 
-class UsuarioService : IUsuarioService {
+class UsuarioService(
     private val repositorio: IUsuarioRepository = UsuarioRepository()
+) : IUsuarioService {
 
     override fun crearUsuario(nombre: String): Usuario {
         val usuario = Usuario(nombre)
