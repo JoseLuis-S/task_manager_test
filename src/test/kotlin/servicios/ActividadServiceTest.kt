@@ -1,14 +1,15 @@
 package servicios
 
 import es.prog2425.taskmanager.datos.ActividadRepository
+import es.prog2425.taskmanager.modelo.Actividad
 import es.prog2425.taskmanager.modelo.Estado
 import es.prog2425.taskmanager.modelo.Tarea
 import es.prog2425.taskmanager.servicios.ActividadService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 
 class ActividadServiceTest : DescribeSpec({
@@ -101,6 +102,27 @@ class ActividadServiceTest : DescribeSpec({
             shouldThrow<java.lang.NullPointerException> {
                 actividadService.cambiarEstadoTarea(tarea!!, nuevoEstado)
             }
+        }
+    }
+
+    describe("listarActividades") {
+
+        it("Deberia retornar una lista de actividades cuando el repositorio tiene datos") {
+            val actividadesMock = listOf(mockk<Actividad>(), mockk<Actividad>())
+            every { mockRepositorio.obtenerActividades() } returns actividadesMock
+
+            val actividades = actividadService.listarActividades()
+
+            actividades shouldBe actividadesMock
+        }
+
+        it("Deberia retornar una lista vacia cuando el repositorio esta vacio") {
+            val actividadesMock = emptyList<Actividad>()
+            every { mockRepositorio.obtenerActividades() } returns actividadesMock
+
+            val actividades = actividadService.listarActividades()
+
+            actividades shouldBe actividadesMock
         }
     }
 })
