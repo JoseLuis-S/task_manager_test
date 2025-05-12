@@ -26,13 +26,5 @@ class ActividadService(private val repositorio: IActividadRepository) {
         tarea.cambiarEstadoConHistorial(nuevoEstado)
     }
 
-    fun cerrarTarea(tarea: Tarea) {
-        tarea.cerrarConHistorial()
-    }
-
-    fun asignarTarea(tarea: Tarea, usuario: Usuario) {
-        tarea.asignarUsuarioConHistorial(usuario)
-    }
-
     fun listarActividades(): List<Actividad> = repositorio.obtenerActividades()
 }
