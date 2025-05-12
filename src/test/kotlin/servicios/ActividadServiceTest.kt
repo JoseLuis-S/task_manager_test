@@ -5,9 +5,9 @@ import es.prog2425.taskmanager.modelo.Tarea
 import es.prog2425.taskmanager.servicios.ActividadService
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 
 class ActividadServiceTest : DescribeSpec({
@@ -44,37 +44,20 @@ class ActividadServiceTest : DescribeSpec({
 
     describe("crearTarea") {
 
-        it("Deberia crear una tarea con etiquetas y agregarla al repositorio") {
-            val descripcion = "Tarea importante"
-            val etiquetas = listOf("urgente", "personal")
+        it("Deberia crear una tarea con una descripcion valida y agregarla al repositorio") {
+            val descripcion = "Tarea de ejemplo"
 
-            val tareaMock = mockk<Tarea>(relaxed = true)
-            every { Tarea.crearInstancia(descripcion) } returns tareaMock
-            every { mockRepositorio.agregarTarea(tareaMock) } returns Unit
+            actividadService.crearTarea(descripcion)
 
-            val resultado = actividadService.crearTarea(descripcion, etiquetas)
-
-            verify { tareaMock.agregarEtiqueta("urgente") }
-            verify { tareaMock.agregarEtiqueta("personal") }
-            verify { mockRepositorio.agregarTarea(tareaMock) }
-
-            resultado shouldBe tareaMock
+            verify { mockRepositorio.agregarTarea(any()) }
         }
 
-        it("Deberia crear una tarea sin etiquetas si no se pasan etiquetas") {
-            val descripcion = "Tarea sin etiquetas"
-            val etiquetas = emptyList<String>()
+        it("Deberia lanzar una excepcion si la descripcion es nula o vacia") {
+            val descripcion = ""
 
-            val tareaMock = mockk<Tarea>(relaxed = true)
-            every { Tarea.crearInstancia(descripcion) } returns tareaMock
-            every { mockRepositorio.agregarTarea(tareaMock) } returns Unit
-
-            val resultado = actividadService.crearTarea(descripcion, etiquetas)
-
-            verify(exactly = 0) { tareaMock.agregarEtiqueta(any()) } // No debe agregar ninguna etiqueta
-            verify { mockRepositorio.agregarTarea(tareaMock) }
-
-            resultado shouldBe tareaMock
+            shouldThrow<IllegalArgumentException> {
+                actividadService.crearTarea(descripcion)
+            }
         }
     }
 })

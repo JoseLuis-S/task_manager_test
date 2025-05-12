@@ -9,6 +9,10 @@ class Tarea private constructor(descripcion: String): Actividad(descripcion) {
     private var usuarioAsignado: Usuario? = null
     private val historial = mutableListOf<Pair<String, String>>()
 
+    init {
+        require(descripcion.isNotEmpty()) { "La descripcion debe contener algo" }
+    }
+
     companion object {
         fun crearInstancia(descripcion: String) = Tarea(descripcion)
     }

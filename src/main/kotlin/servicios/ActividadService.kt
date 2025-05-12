@@ -1,6 +1,5 @@
 package es.prog2425.taskmanager.servicios
 
-import es.prog2425.taskmanager.datos.ActividadRepository
 import es.prog2425.taskmanager.datos.IActividadRepository
 import es.prog2425.taskmanager.modelo.*
 
@@ -11,11 +10,9 @@ class ActividadService(private val repositorio: IActividadRepository) {
         repositorio.agregarEvento(evento)
     }
 
-    fun crearTarea(descripcion: String, etiquetas: List<String>): Tarea {
+    fun crearTarea(descripcion: String) {
         val tarea = Tarea.crearInstancia(descripcion)
-        etiquetas.forEach { tarea.agregarEtiqueta(it) }
         repositorio.agregarTarea(tarea)
-        return tarea
     }
 
     fun asociarSubtarea(tareaPrincipal: Tarea, subtarea: Tarea) {
