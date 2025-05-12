@@ -1,4 +1,0 @@
-package servicios
-
-class GestorActividadesTest {
-}

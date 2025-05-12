@@ -20,10 +20,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-
-tasks.test {
-    useJUnitPlatform()
-}
 kotlin {
     jvmToolchain(21)
 }

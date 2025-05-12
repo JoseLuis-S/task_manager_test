@@ -1,10 +1,10 @@
 package es.prog2425.taskmanager.servicios
 
 import es.prog2425.taskmanager.datos.ActividadRepository
+import es.prog2425.taskmanager.datos.IActividadRepository
 import es.prog2425.taskmanager.modelo.*
 
-class ActividadService {
-    private val repositorio = ActividadRepository()
+class ActividadService(private val repositorio: IActividadRepository) {
 
     fun crearEvento(descripcion: String, fecha: String, ubicacion: String) {
         val evento = Evento.crearInstancia(descripcion, fecha, ubicacion)

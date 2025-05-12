@@ -1,6 +1,6 @@
 package es.prog2425.taskmanager.servicios
 
-
+import es.prog2425.taskmanager.datos.ActividadRepository
 import es.prog2425.taskmanager.modelo.Actividad
 import es.prog2425.taskmanager.presentacion.Consola
 import es.prog2425.taskmanager.presentacion.Interfaz
@@ -9,12 +9,10 @@ import es.prog2425.taskmanager.modelo.Tarea
 import es.prog2425.taskmanager.modelo.Estado
 import es.prog2425.taskmanager.modelo.Evento
 
-
-
 class GestorActividades {
 
     private val salida: Interfaz = Consola()
-    private val servicio = ActividadService()
+    private val servicio = ActividadService(ActividadRepository())
     private val servicioUsuario: IUsuarioService = UsuarioService()
 
     // Muestra el menu principal
