@@ -15,37 +15,102 @@ class GestorActividades {
     private val servicio = ActividadService(ActividadRepository())
     private val servicioUsuario: IUsuarioService = UsuarioService()
 
-    // Muestra el menu principal
-    fun menu() {
-        var salir = false
-        do {
-            try {
-                salida.mostrarMenu()
-                when (salida.leerNum()) {
-                    -1 -> salida.mostrar("\nOpcion no valida.")
-                    1 -> servicio.crearEvento(pedirDescripcion(), pedirFecha(), pedirUbicacion())
-                    2 -> crearTarea()
-                    3 -> listarActividades()
-                    4 -> asociarSubtarea()
-                    5 -> cambiarEstadoTarea()
-                    6 -> cerrarTarea()
-                    7 -> crearUsuario()
-                    8 -> asignarTareaAUsuario()
-                    9 -> consultarTareasUsuario()
-                    10 -> filtrarActividades()
-                    11 -> consultarHistorialTarea()
-                    12 -> salir = true
-                }
-            } catch (e: java.lang.IllegalStateException) {
-                salida.mostrar("$e")
-            }
-
-        } while (!salir)
+    fun crearEvento() {
+        val descripcion = pedirDescripcion()
+        val fecha = pedirFecha()
+        val ubicacion = pedirUbicacion()
+        servicio.crearEvento(descripcion, fecha, ubicacion)
+        salida.mostrar("\nEvento creado exitosamente.")
     }
 
-    private fun consultarHistorialTarea() {
-        salida.mostrar("\nSelecciona la tarea para ver su historial:")
-        val tarea = obtenerTarea()
+    fun crearTarea() {
+        val descripcion = pedirDescripcion()
+        servicio.crearTarea(descripcion)
+        salida.mostrar("\nTarea creada con éxito y etiquetas asignadas.")
+    }
+
+    fun listarActividades() {
+        val actividades = servicio.listarActividades()
+        if (actividades.isEmpty()) {
+            salida.mostrar("\nNo hay actividades registradas.")
+        } else {
+            salida.mostrar("\nListado de actividades:")
+            actividades.forEach { salida.mostrar(it.obtenerDetalle()) }
+        }
+    }
+
+    fun asociarSubtarea() {
+        val tareaPrincipal = seleccionarTareaConMensaje("\nSelecciona la tarea principal:")
+        salida.mostrar("\nDescribe la subtarea a asociar:")
+        val descripcionSubtarea = pedirDescripcion()
+        val subtarea = Tarea.crearInstancia(descripcionSubtarea)
+        servicio.asociarSubtarea(tareaPrincipal, subtarea)
+        salida.mostrar("\nSubtarea asociada a la tarea principal.")
+    }
+
+    fun cambiarEstadoTarea() {
+        val tarea = seleccionarTareaConMensaje("\nSelecciona la tarea cuyo estado deseas cambiar:")
+        val nuevoEstado = solicitarEstadoParaTarea() ?: return
+
+        try {
+            servicio.cambiarEstadoTarea(tarea, nuevoEstado)
+            salida.mostrar("\nEstado de la tarea cambiado exitosamente a ${nuevoEstado.name}.")
+        } catch (e: IllegalStateException) {
+            salida.mostrar("\nError: ${e.message}")
+        }
+    }
+
+    fun cerrarTarea() {
+        val tarea = seleccionarTareaConMensaje("\nSelecciona la tarea a cerrar:")
+        try {
+            tarea.cerrar()
+            salida.mostrar("\nTarea cerrada exitosamente.")
+        } catch (e: IllegalStateException) {
+            salida.mostrar("\nNo se puede cerrar la tarea porque tiene subtareas abiertas.")
+        }
+    }
+
+    fun crearUsuario() {
+        salida.mostrar("\nIntroduce el nombre del nuevo usuario: ")
+        val nombre = salida.leerString()
+        servicioUsuario.crearUsuario(nombre)
+        salida.mostrar("\nUsuario '$nombre' creado con éxito.")
+    }
+
+    fun asignarTareaAUsuario() {
+        val tarea = seleccionarTareaConMensaje("\nSelecciona la tarea a asignar: ")
+        salida.mostrar("\nIntroduce el nombre del usuario al que asignar la tarea: ")
+        val nombreUsuario = salida.leerString()
+        val usuario = servicioUsuario.obtenerUsuarioPorNombre(nombreUsuario)
+
+        if (usuario != null) {
+            servicioUsuario.asignarTareaAUsuario(usuario, tarea)
+            salida.mostrar("\nTarea asignada correctamente a $nombreUsuario.")
+        } else {
+            salida.mostrar("\nNo se encontró un usuario con ese nombre.")
+        }
+    }
+
+    fun consultarTareasUsuario() {
+        salida.mostrar("\nIntroduce el nombre del usuario para consultar sus tareas: ")
+        val nombreUsuario = salida.leerString()
+        val usuario = servicioUsuario.obtenerUsuarioPorNombre(nombreUsuario)
+
+        if (usuario != null) {
+            val tareas = servicioUsuario.obtenerTareasPorUsuario(usuario)
+            if (tareas.isEmpty()) {
+                salida.mostrar("\nEl usuario no tiene tareas asignadas.")
+            } else {
+                salida.mostrar("\nTareas asignadas a $nombreUsuario:")
+                tareas.forEach { salida.mostrar(it.obtenerDetalle()) }
+            }
+        } else {
+            salida.mostrar("\nNo se encontró un usuario con ese nombre.")
+        }
+    }
+
+    fun consultarHistorialTarea() {
+        val tarea = seleccionarTareaConMensaje("\nSelecciona la tarea para ver su historial:")
         val historial = tarea.obtenerHistorial()
         if (historial.isEmpty()) {
             salida.mostrar("\nLa tarea no tiene historial.")
@@ -57,182 +122,13 @@ class GestorActividades {
         }
     }
 
-    // Listar actividades
-    private fun listarActividades() {
-        val actividades = servicio.listarActividades()
-        if (actividades.isEmpty()) {
-            salida.mostrar("\nNo hay actividades registradas.")
-        } else {
-            salida.mostrar("\nListado de actividades:")
-            actividades.forEach { actividad ->
-                salida.mostrar(actividad.obtenerDetalle())
-            }
-        }
-    }
-
-    // Cambiar el estado de una tarea
-    private fun cambiarEstadoTarea() {
-        salida.mostrar("\nSelecciona la tarea cuyo estado deseas cambiar:")
-        val tarea = obtenerTarea()
-
-        salida.mostrar("\nElige el nuevo estado para la tarea:")
-        salida.mostrar("1. ABIERTA")
-        salida.mostrar("2. EN PROGRESO")
-        salida.mostrar("3. FINALIZADA")
-
-        val estadoSeleccionado = salida.leerNum()
-        val nuevoEstado = when (estadoSeleccionado) {
-            1 -> Estado.ABIERTA
-            2 -> Estado.EN_PROGRESO
-            3 -> Estado.FINALIZADA
-            else -> {
-                salida.mostrar("\nOpción no válida. El estado no ha sido cambiado.")
-                return
-            }
-        }
-
-        try {
-            servicio.cambiarEstadoTarea(tarea, nuevoEstado)
-            salida.mostrar("\nEstado de la tarea cambiado exitosamente a ${nuevoEstado.name}.")
-        } catch (e: IllegalStateException) {
-            salida.mostrar("\nError: ${e.message}")
-        }
-    }
-
-    // Cerrar tarea (verificando que todas las subtareas estén cerradas)
-    private fun cerrarTarea() {
-        salida.mostrar("\nSelecciona la tarea a cerrar:")
-        val tarea = obtenerTarea()
-        try {
-            tarea.cerrar()
-            salida.mostrar("\nTarea cerrada exitosamente.")
-        } catch (e: IllegalStateException) {
-            salida.mostrar("\nNo se puede cerrar la tarea porque tiene subtareas abiertas.")
-        }
-    }
-
-    private fun crearTarea() {
-        val descripcion = pedirDescripcion()
-        servicio.crearTarea(descripcion)
-        salida.mostrar("\nTarea creada con éxito y etiquetas asignadas.")
-    }
-
-    private fun pedirEtiquetas(): List<String> {
-        salida.mostrarInput("Introduce las etiquetas (separadas por ';'):")
-        return salida.leerString().split(';').map { it.trim() }.filter { it.isNotEmpty() }
-    }
-
-    // Asociar una subtarea a una tarea principal
-    private fun asociarSubtarea() {
-        salida.mostrar("\nSelecciona la tarea principal:")
-        val tareaPrincipal = obtenerTarea()
-        salida.mostrar("\nDescribe la subtarea a asociar:")
-        val descripcionSubtarea = pedirDescripcion()
-        val subtarea = Tarea.crearInstancia(descripcionSubtarea)
-        servicio.asociarSubtarea(tareaPrincipal, subtarea)
-        salida.mostrar("\nSubtarea asociada a la tarea principal.")
-    }
-
-    // Obtener tarea por ID o descripción
-    private fun obtenerTarea(): Tarea {
-        // Listamos todas las tareas para que el usuario vea y elija
-        val tareas = servicio.listarActividades().filterIsInstance<Tarea>()
-
-        if (tareas.isEmpty()) {
-            salida.mostrar("\nNo hay tareas disponibles.")
-            println("Error no controlado si no hay try-catch")
-            throw IllegalStateException("No hay tareas disponibles para seleccionar.")
-
-        }
-
-        salida.mostrar("\nSelecciona una tarea de la lista:")
-        tareas.forEachIndexed { index, tarea ->
-            salida.mostrar("${index + 1}. ${tarea.obtenerDetalle()}")
-        }
-
-        // Le pedimos al usuario que elija una tarea por su número (índice + 1)
-        var tareaSeleccionada: Tarea? = null
-        while (tareaSeleccionada == null) {
-            salida.mostrar("\nIntroduce el número de la tarea:")
-            val numeroTarea = salida.leerNum()
-
-            if (numeroTarea in 1..tareas.size) {
-                tareaSeleccionada = tareas[numeroTarea - 1]
-            } else {
-                salida.mostrar("\nOpción inválida. Por favor, elige un número válido.")
-            }
-        }
-
-        return tareaSeleccionada
-    }
-
-    private fun pedirDescripcion(): String {
-        while (true) {
-            salida.mostrar("\nIntroduce la descripcion")
-            salida.mostrarInput("> ")
-            val descripcion = salida.leerString()
-
-            if (descripcion != "") return descripcion else salida.mostrar("\nLa descripcion debe contener algo.")
-        }
-    }
-
-    private fun pedirFecha(): String {
-        while (true) {
-            salida.mostrar("\nIntroduce la fecha con el siguiente formato (dd-MM-yyyy)")
-            salida.mostrarInput("> ")
-            val fecha = salida.leerString()
-
-            if (Utilidades().esFechaValida(fecha)) {
-                return fecha
-            } else salida.mostrar("\nFecha invalida.")
-        }
-    }
-
-    private fun pedirUbicacion(): String {
-        while (true) {
-            salida.mostrar("\nIntroduce la ubicacion")
-            salida.mostrarInput("> ")
-            val ubicacion = salida.leerString()
-
-            if (ubicacion != "") return ubicacion else salida.mostrar("\nLa ubicacion debe contener algo.")
-        }
-    }
-
-    private fun crearUsuario() {
-        salida.mostrar("\nIntroduce el nombre del nuevo usuario: ")
-        val nombre = salida.leerString()
-        servicioUsuario.crearUsuario(nombre)
-        salida.mostrar("\nUsuario '$nombre' creado con éxito.")
-    }
-
-    private fun asignarTareaAUsuario() {
-        salida.mostrar("\nSelecciona la tarea a asignar: ")
-        val tarea = obtenerTarea()
-
-
-
-
-        salida.mostrar("\nIntroduce el nombre del usuario al que asignar la tarea: ")
-        val nombreUsuario = salida.leerString()
-
-        val usuario = servicioUsuario.obtenerUsuarioPorNombre(nombreUsuario)
-        if (usuario != null) {
-            servicioUsuario.asignarTareaAUsuario(usuario, tarea)
-            salida.mostrar("\nTarea asignada correctamente a $nombreUsuario.")
-        } else {
-            salida.mostrar("\nNo se encontró un usuario con ese nombre.")
-        }
-    }
-
-    private fun filtrarActividades() {
+    fun filtrarActividades() {
         salida.mostrar("\nFiltrar actividades por:")
         salida.mostrar("1. Tipo (Tarea o Evento)")
         salida.mostrar("2. Estado (ABIERTA, EN_PROGRESO, FINALIZADA)")
         salida.mostrar("3. Etiquetas")
         salida.mostrar("4. Usuario")
-        val opcionFiltro = salida.leerNum()
-
-        when (opcionFiltro) {
+        when (salida.leerNum()) {
             1 -> filtrarPorTipo()
             2 -> filtrarPorEstado()
             3 -> filtrarPorEtiquetas()
@@ -241,17 +137,81 @@ class GestorActividades {
         }
     }
 
-    private fun filtrarPorUsuario() {
-        salida.mostrar("\nIntroduce el nombre del usuario a filtrar:")
-        val nombreUsuario = salida.leerString()
-        val usuario = servicioUsuario.obtenerUsuarioPorNombre(nombreUsuario) ?: run {
-            salida.mostrar("\nNo se encontró un usuario con ese nombre.")
-            return
+    // --- Métodos auxiliares extraídos ---
+
+    private fun seleccionarTareaConMensaje(mensaje: String): Tarea {
+        salida.mostrar(mensaje)
+        return obtenerTarea()
+    }
+
+    private fun solicitarEstadoParaTarea(): Estado? {
+        salida.mostrar("\nElige el nuevo estado para la tarea:")
+        salida.mostrar("1. ABIERTA")
+        salida.mostrar("2. EN PROGRESO")
+        salida.mostrar("3. FINALIZADA")
+
+        return when (salida.leerNum()) {
+            1 -> Estado.ABIERTA
+            2 -> Estado.EN_PROGRESO
+            3 -> Estado.FINALIZADA
+            else -> {
+                salida.mostrar("\nOpción no válida.")
+                null
+            }
         }
-        val filtradas = servicio.listarActividades()
-            .filterIsInstance<Tarea>()
-            .filter { it.obtenerUsuarioAsignado() == usuario }
-        mostrarActividades(filtradas)
+    }
+
+    private fun obtenerTarea(): Tarea {
+        val tareas = servicio.listarActividades().filterIsInstance<Tarea>()
+        if (tareas.isEmpty()) throw IllegalStateException("No hay tareas disponibles para seleccionar.")
+
+        salida.mostrar("\nSelecciona una tarea de la lista:")
+        tareas.forEachIndexed { index, tarea ->
+            salida.mostrar("${index + 1}. ${tarea.obtenerDetalle()}")
+        }
+
+        var seleccion: Tarea? = null
+        while (seleccion == null) {
+            salida.mostrar("\nIntroduce el número de la tarea:")
+            val input = salida.leerNum()
+            if (input in 1..tareas.size) {
+                seleccion = tareas[input - 1]
+            } else {
+                salida.mostrar("\nOpción inválida. Intenta de nuevo.")
+            }
+        }
+
+        return seleccion
+    }
+
+    private fun pedirDescripcion(): String {
+        while (true) {
+            salida.mostrar("\nIntroduce la descripcion")
+            salida.mostrarInput("> ")
+            val descripcion = salida.leerString()
+            if (descripcion.isNotBlank()) return descripcion
+            salida.mostrar("\nLa descripcion debe contener algo.")
+        }
+    }
+
+    private fun pedirFecha(): String {
+        while (true) {
+            salida.mostrar("\nIntroduce la fecha (dd-MM-yyyy)")
+            salida.mostrarInput("> ")
+            val fecha = salida.leerString()
+            if (Utilidades().esFechaValida(fecha)) return fecha
+            salida.mostrar("\nFecha invalida.")
+        }
+    }
+
+    private fun pedirUbicacion(): String {
+        while (true) {
+            salida.mostrar("\nIntroduce la ubicacion")
+            salida.mostrarInput("> ")
+            val ubicacion = salida.leerString()
+            if (ubicacion.isNotBlank()) return ubicacion
+            salida.mostrar("\nLa ubicacion debe contener algo.")
+        }
     }
 
     private fun filtrarPorTipo() {
@@ -260,7 +220,7 @@ class GestorActividades {
         salida.mostrar("2. Evento")
         val tipoSeleccionado = salida.leerNum()
 
-        val actividadesFiltradas = when (tipoSeleccionado) {
+        val filtradas = when (tipoSeleccionado) {
             1 -> servicio.listarActividades().filterIsInstance<Tarea>()
             2 -> servicio.listarActividades().filterIsInstance<Evento>()
             else -> {
@@ -269,11 +229,11 @@ class GestorActividades {
             }
         }
 
-        mostrarActividades(actividadesFiltradas)
+        mostrarActividades(filtradas)
     }
 
     private fun filtrarPorEstado() {
-        salida.mostrar("\nSelecciona el estado de la actividad a filtrar:")
+        salida.mostrar("\nSelecciona el estado:")
         salida.mostrar("1. ABIERTA")
         salida.mostrar("2. EN PROGRESO")
         salida.mostrar("3. FINALIZADA")
@@ -289,19 +249,35 @@ class GestorActividades {
             }
         }
 
-        val actividadesFiltradas = servicio.listarActividades().filter { it is Tarea && it.estado == estado }
-        mostrarActividades(actividadesFiltradas)
+        val filtradas = servicio.listarActividades()
+            .filterIsInstance<Tarea>()
+            .filter { it.estado == estado }
+
+        mostrarActividades(filtradas)
     }
 
     private fun filtrarPorEtiquetas() {
-        salida.mostrar("\nIntroduce la etiqueta a filtrar: ")
+        salida.mostrar("\nIntroduce la etiqueta a filtrar:")
         val etiqueta = salida.leerString()
+        val filtradas = servicio.listarActividades()
+            .filter { it.obtenerEtiquetas().contains(etiqueta) }
 
-        val actividadesFiltradas = servicio.listarActividades().filter {
-            (it is Tarea || it is Evento) && it.obtenerEtiquetas().contains(etiqueta)
+        mostrarActividades(filtradas)
+    }
+
+    private fun filtrarPorUsuario() {
+        salida.mostrar("\nIntroduce el nombre del usuario:")
+        val nombre = salida.leerString()
+        val usuario = servicioUsuario.obtenerUsuarioPorNombre(nombre) ?: run {
+            salida.mostrar("\nNo se encontró un usuario con ese nombre.")
+            return
         }
 
-        mostrarActividades(actividadesFiltradas)
+        val filtradas = servicio.listarActividades()
+            .filterIsInstance<Tarea>()
+            .filter { it.obtenerUsuarioAsignado() == usuario }
+
+        mostrarActividades(filtradas)
     }
 
     private fun mostrarActividades(actividades: List<Actividad>) {
@@ -309,29 +285,7 @@ class GestorActividades {
             salida.mostrar("\nNo se encontraron actividades con los filtros seleccionados.")
         } else {
             salida.mostrar("\nActividades filtradas:")
-            actividades.forEach { actividad ->
-                salida.mostrar(actividad.obtenerDetalle())
-            }
-        }
-    }
-
-    private fun consultarTareasUsuario() {
-        salida.mostrar("\nIntroduce el nombre del usuario para consultar sus tareas: ")
-        val nombreUsuario = salida.leerString()
-
-        val usuario = servicioUsuario.obtenerUsuarioPorNombre(nombreUsuario)
-        if (usuario != null) {
-            val tareas = servicioUsuario.obtenerTareasPorUsuario(usuario)
-            if (tareas.isEmpty()) {
-                salida.mostrar("\nEl usuario no tiene tareas asignadas.")
-            } else {
-                salida.mostrar("\nTareas asignadas a $nombreUsuario:")
-                tareas.forEach { tarea ->
-                    salida.mostrar(tarea.obtenerDetalle())
-                }
-            }
-        } else {
-            salida.mostrar("\nNo se encontró un usuario con ese nombre.")
+            actividades.forEach { salida.mostrar(it.obtenerDetalle()) }
         }
     }
 }
