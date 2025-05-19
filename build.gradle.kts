@@ -1,5 +1,10 @@
 plugins {
     kotlin("jvm") version "2.0.10"
+    id("org.jetbrains.dokka") version "1.8.10"
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(project.layout.buildDirectory.dir("docs").get().asFile)
 }
 
 group = "entornos2425.dam1.task_manager_test"
