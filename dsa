@@ -1,0 +1,179 @@
+[33mcommit 2e06bc8751f228457017f05c48fc3639736bce7b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/P4.3.2-JLSH[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mP4.3.2-JLSH[m[33m)[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 11:42:45 2025 +0200
+
+    Actividad Code Smells completada
+
+[33mcommit 6d81e33de743505e209bb4f67a8d458430a1bf18[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 10:37:02 2025 +0200
+
+    Readme completado
+
+[33mcommit a7e35a46bcaddd7f0de0d4c07073c1a7877d6553[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 10:01:40 2025 +0200
+
+    Quinto error ktlint arreglado
+
+[33mcommit 094353377d5c41fe411a223e19c817b98bfb2396[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 09:57:22 2025 +0200
+
+    Cuarto error ktlint arreglado
+
+[33mcommit 6071094615b1aefa734b1412b523ab8cfa27ba50[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 09:56:14 2025 +0200
+
+    Tercer error ktlint arreglado
+
+[33mcommit 393c754a7bdc3ed562a98ea77e8565677d0391dd[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 09:54:16 2025 +0200
+
+    Segundo error ktlint arreglado
+
+[33mcommit c1d9c305328080d52a79f3b06c675851ce35e32a[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 19 09:47:53 2025 +0200
+
+    Primer error de ktlint arreglado
+
+[33mcommit 7ba0614a41712a051d8b9ce4df9b785e176b68a0[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 12:47:42 2025 +0200
+
+    Documentacion completada
+
+[33mcommit 8af42df506addacb173213f94acee55a4ca1fdcd[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 12:15:58 2025 +0200
+
+    Test para funcion listarActividades completado
+
+[33mcommit 9d3c7c3fe14ac1a465894beaaa1f4bdd886395ee[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 12:14:18 2025 +0200
+
+    Test para funcion cambiarEstadoTarea completado
+
+[33mcommit a9b92bf4f69ce815e7e45bb7d785505ca882bbbe[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 12:12:09 2025 +0200
+
+    Test para funcion asociarSubtarea completado
+
+[33mcommit abbcf5a485551b3790405960eea375f23244661c[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 12:08:49 2025 +0200
+
+    Test funcion crearTarea con cambios
+
+[33mcommit 7f0f735e15e8c24a96b972285839fbe67a7611a0[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 11:40:06 2025 +0200
+
+    Test para funcion crearTarea hecho
+
+[33mcommit 11d039863147c572269df0b4afdbbe66154d1b41[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 10:59:24 2025 +0200
+
+    Test para comprobar excepciones de crear evento completado
+
+[33mcommit 953374cfe848985cc49c341439fffc0a53eef2dc[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 10:44:15 2025 +0200
+
+    Primer test crear evento hecho
+
+[33mcommit c09086e9efaaa3a84fafa331637f4867fcd5cc2f[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 10:05:35 2025 +0200
+
+    Dependencias añadidas
+
+[33mcommit 5833d1702863695fe29d19ae024dccb941320f24[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Mon May 12 10:01:55 2025 +0200
+
+    Estructura de carpetas creada, clase servicio test creada
+
+[33mcommit e5df686f86a9f99a66577be63965b99dced35dd6[m
+Author: gromber05 <gromber2911@g.educaand.es>
+Date:   Thu May 1 20:23:00 2025 +0200
+
+    Error en consola arreglado / Gonzalo
+
+[33mcommit c0517225f77eb0aaff904f057e9d3ea87b20b8ef[m
+Author: gromber05 <gromber2911@g.educaand.es>
+Date:   Thu May 1 18:23:00 2025 +0200
+
+    Error en consola arreglado / Gonzalo
+
+[33mcommit 6e544afb52528617e07d0507ffeb247ab168a8e9[m
+Author: elvirarm <emorrom762@g.educaand.es>
+Date:   Wed Apr 30 23:56:47 2025 +0200
+
+    añadidoNombreError
+
+[33mcommit fbf38c917267c23b6162f6bcf2545f7347d8d353[m
+Author: Elvira Romero <emorrom762@g.educaand.es>
+Date:   Wed Apr 30 23:52:51 2025 +0200
+
+    Error 4 añadido. Asignación tarea finalizada
+
+[33mcommit a9552ed19716f06e4e7fbd29f97d59f75a9c4fe3[m
+Author: JoseLuis-S <shjose@iesrafaelalberti.es>
+Date:   Tue Apr 29 17:39:23 2025 +0200
+
+    Error 3 completado
+
+[33mcommit f58704dc4046c535ab9fb5b74e8ccb7132d6e176[m
+Author: juanma-ge <jgomest545@g.educaand.es>
+Date:   Mon Apr 28 11:14:29 2025 +0200
+
+    Segundo error corregido
+
+[33mcommit 4f71e200b804cbc8c1df437de37f1adbdff75ec8[m
+Author: juanma-ge <jgomest545@g.educaand.es>
+Date:   Thu Apr 24 20:04:33 2025 +0200
+
+    Segundo error corregido
+
+[33mcommit 42cfa1ba142b5a8689a512835eea6a5674381e86[m
+Author: juanma-ge <jgomest545@g.educaand.es>
+Date:   Thu Apr 24 20:03:49 2025 +0200
+
+    Segundo error corregido
+
+[33mcommit 71a5fb1cabc0c1c5164f2ce464037944d9dd1318[m
+Author: juanma-ge <jgomest545@g.educaand.es>
+Date:   Thu Apr 24 20:03:20 2025 +0200
+
+    Segundo error corregido
+
+[33mcommit df1a5e460bc272e527125ab2563b0f9a97706b4b[m
+Author: jesuscb123 <cbjesus@iesrafaelalberti.es>
+Date:   Thu Apr 24 19:18:18 2025 +0200
+
+    El error solucionado y documentado. Con dos formas de resolverlo.
+
+[33mcommit f33a9ffaa22aa372d290b3348deae7f88805037f[m
+Author: jesuscb123 <cbjesus@iesrafaelalberti.es>
+Date:   Thu Apr 24 18:55:32 2025 +0200
+
+    añadido error al readme.
+
+[33mcommit 28654acc7552783d050e60383748eed8ddb91da9[m
+Author: jesuscb123 <cbjesus@iesrafaelalberti.es>
+Date:   Thu Apr 24 18:32:04 2025 +0200
+
+    añadido readme
+
+[33mcommit 17e66417f76878766ba038418e9cae71393f5977[m
+Author: jesuscb123 <cbjesus@iesrafaelalberti.es>
+Date:   Thu Apr 24 18:31:19 2025 +0200
+
+    Initial commit
