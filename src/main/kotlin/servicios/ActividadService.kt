@@ -9,7 +9,11 @@ import es.prog2425.taskmanager.modelo.Evento
 class ActividadService(
     private val repositorio: IActividadRepository,
 ) {
-    fun crearEvento(descripcion: String, fecha: String, ubicacion: String) {
+    fun crearEvento(
+        descripcion: String,
+        fecha: String,
+        ubicacion: String,
+    ) {
         val evento = Evento.crearInstancia(descripcion, fecha, ubicacion)
         repositorio.agregarEvento(evento)
     }
@@ -29,3 +33,4 @@ class ActividadService(
 
     fun listarActividades(): List<Actividad> = repositorio.obtenerActividades()
 }
+
