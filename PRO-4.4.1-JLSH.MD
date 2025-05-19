@@ -44,6 +44,20 @@ tasks.dokkaHtml.configure {
 #### Documentacion generada por Dokka
 ![](assets/image1.png)
 
+### Clases documentadas con Kdoc
+
+- Evento:
+
+https://github.com/JoseLuis-S/task_manager_test/blob/5a14ef380d106dbe5120fcd27889c8d7e206c077/src/main/kotlin/modelo/Evento.kt#L1-L40
+
+- Tarea:
+
+https://github.com/JoseLuis-S/task_manager_test/blob/5a14ef380d106dbe5120fcd27889c8d7e206c077/src/main/kotlin/modelo/Tarea.kt#L1-L161
+
+- Usuario: 
+
+https://github.com/JoseLuis-S/task_manager_test/blob/5a14ef380d106dbe5120fcd27889c8d7e206c077/src/main/kotlin/modelo/Usuario.kt#L1-L29
+
 ---
 
 ### 4. Documentacion del Proceso
