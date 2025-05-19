@@ -33,4 +33,3 @@ class ActividadService(
 
     fun listarActividades(): List<Actividad> = repositorio.obtenerActividades()
 }
-
