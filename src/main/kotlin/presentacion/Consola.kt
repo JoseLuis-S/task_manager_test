@@ -4,7 +4,7 @@ import es.prog2425.taskmanager.modelo.Actividad
 import es.prog2425.taskmanager.modelo.Evento
 import es.prog2425.taskmanager.modelo.Tarea
 
-class Consola: Interfaz {
+class Consola : Interfaz {
     private val separator = "=============================="
 
     override fun mostrarMenu() {
