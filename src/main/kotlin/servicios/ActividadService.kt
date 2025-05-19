@@ -1,7 +1,10 @@
 package es.prog2425.taskmanager.servicios
 
 import es.prog2425.taskmanager.datos.IActividadRepository
-import es.prog2425.taskmanager.modelo.*
+import es.prog2425.taskmanager.modelo.Actividad
+import es.prog2425.taskmanager.modelo.Estado
+import es.prog2425.taskmanager.modelo.Tarea
+import es.prog2425.taskmanager.modelo.Evento
 
 class ActividadService(private val repositorio: IActividadRepository) {
 
